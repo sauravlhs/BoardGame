@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: boardgame
-          image: sauravlhs/CICDProject:latest
+          image: sauravlhs/cicdProject:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
