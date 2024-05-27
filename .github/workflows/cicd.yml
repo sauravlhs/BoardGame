@@ -56,11 +56,11 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build -t sauravlhs/cicdroject:latest .
+        docker build -t sauravlhs/cicdproject:latest .
 
     - name: Trivy Image Scan
       run: |
-        trivy image --format table -o trivy-image-report.html sauravlhs/cicdroject:latest
+        trivy image --format table -o trivy-image-report.html sauravlhs/cicdproject:latest
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
@@ -70,7 +70,7 @@ jobs:
 
     - name: Push Docker Image
       run: |
-          docker push sauravlhs/cicdroject:latest
+          docker push sauravlhs/cicdproject:latest
           
     - name: Kubectl Action
       uses: tale/kubectl-action@v1
