@@ -319,11 +319,12 @@
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
 12. **Configuring required tools in Jenkins**
-    ###Maven
+    
+###Maven
     - Go to the Maven configuration section
     - In Default settings provider select use Default Maven Settings
 
-    ###JDK
+###JDK
    
     
 12. Go to Jenkins Dashboard -> Tools -> Configure Maven, JDK, SonarQube, Docker, 
