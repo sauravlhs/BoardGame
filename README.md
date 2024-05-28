@@ -53,6 +53,12 @@
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
 
+19. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
+20. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/141c3226-e95e-4fd1-9756-6ff674754731)
+
+
 
 
 
