@@ -462,26 +462,167 @@
       }
      
       ```
+15. **Deploying application to kubernetes cluster**
+
+     Creating Service Account, Role & Assing the role
+
+     - Creating a service account
+       - create a new file eg. `service.yml` and paste the below command:
+       
+       ```bash
+       apiVersion: v1
+       kind: ServiceAccount
+       metadata:
+       name: jenkins
+       namespace: webapps
+       ```
+
+       - run the file by using the below command
+         ```bash
+         kubectl apply -f service.yml
+         ```
+
+      - Creating a role
+        - create a new file eg. `role.yml` and paste the below command:
+   
+        ```bash
+         apiVersion: rbac.authorization.k8s.io/v1
+         kind: Role
+         metadata:
+         name: app-role
+         namespace: webapps
+         rules:
+         - apiGroups:
+         - ""
+         - apps
+         - autoscaling
+         - batch
+         - extensions
+         - policy
+         - rbac.authorization.k8s.io
+         resources:
+         - pods
+         - componentstatuses
+         - configmaps
+         - daemonsets
+         - deployments
+         - events
+         - endpoints
+         - horizontalpodautoscalers
+         - ingress
+         - jobs
+         - limitranges
+         - namespaces
+         - nodes
+         - pods
+         - persistentvolumes
+         - persistentvolumeclaims
+         - resourcequotas
+         - replicasets
+         - replicationcontrollers
+         - serviceaccounts
+         - services
+         verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+        ```
+
+        - run the file by using the below command
+         ```bash
+         kubectl apply -f role.yml
+         ```
+
+      - Assigning the role to service account
+        - create a new file eg. `bind.yml` and paste the below command:
+        
+        ```bash
+         apiVersion: rbac.authorization.k8s.io/v1
+         kind: RoleBinding
+         metadata:
+         name: app-rolebinding
+         namespace: webapps
+         roleRef:
+         apiGroup: rbac.authorization.k8s.io
+         kind: Role
+         name: app-role
+         subjects:
+         - namespace: webapps
+         kind: ServiceAccount
+         name: jenkins
+        ```
+
+        - run the file by using the below command
+         ```bash
+         kubectl apply -f bind.yml
+         ```
+
+      Generating a token for using the service account in namespace
+    
+      - Create a new file eg. `secret.yml` and paste the below command:
+        
+        ```bash
+         apiVersion: v1
+         kind: Secret
+         type: kubernetes.io/service-account-token
+         metadata:
+           name: mysecretname
+           annotations:
+             kubernetes.io/service-account.name: jenkins
+        ```
+        
+        - run the file by using the below command
+          
+         ```bash
+         kubectl apply -f secret.yml -n webapps
+         ```
+      - Run the below command and copy the token from the output
+        ```bash
+        kubectl describe mysecretname -n webapps
+        ```
+
+      
+
+      
+
+    
+17. **Setting up credentials for pipeline**
+    - Go to Jenkins Dashboard --> Manage Jenkins --> Credentials --> select Global and Add Credentials
+   
+     GitHub
+    - In kind section select `Username with password`.
+    - In scope select `Global`.
+    - In username, give your GitHub username.
+    - In password give git token.
+    - Give ID and description of your choice eg. `git-cred`.
+    - Click on create.
+
+     SonarQube
+    - Go to Sonarqube --> Administration --> security --> tokens --> set the expiry date and click on generate.
+    - Copy the generated token.
+    - Now to go Jenkins --> manage jenkins --> credentials --> select Global and Add Credentials
+    - In kind section select `Secret text`.
+    - In scope select `Global`.
+    - In secret, paste the secret key
+    - Give ID and description of your choice eg. `sonar-token`.
+    - Click on create.
 
 
 
 
-17. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
+18. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/ce56b258-9c4c-4cb3-bb4b-89294a0851e1)
 
-18. Click on Build now.
+19. Click on Build now.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b754b802-0220-4136-b968-31860323db69)
 
-19. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
+20. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/73d44577-9c97-4c93-98a5-3950019e545d)
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
 
-20. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
-21. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
+21. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
+22. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/141c3226-e95e-4fd1-9756-6ff674754731)
 
