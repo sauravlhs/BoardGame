@@ -7,8 +7,61 @@
  
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/08743e68-0bf6-43a7-9af0-d2ae9c523dcd)
    
-4. Make sure you have downloaded the mobaXterm in order to access the EC2 instance through it.
-5. Once you have accessed the instance, update the instance and download the required tools for the project
+4. Make sure you have downloaded the mobaXterm to access the EC2 instance through it.
+5. Once you have accessed the instance, update the instance and download the required tools for the project.
+6. Once all the tools are set up, Open jenkins -> Manage Jenkins -> Available plugins. Now download all the required plugins for the project.
+   
+![image](https://github.com/sauravlhs/BoardGame/assets/67467237/d5c63c2a-bc49-4504-89a7-5922398fab9e)
+
+7. Now set up sonarQube and Nexus.
+8. Now go to Nexus -> Administration -> Configuration -> Webhooks and add the SonarQube URL
+   
+   ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/1e63ba8c-7fd5-402c-b0bf-2048306cecb8)
+
+9. Once this is set, clone the GitHub URL into your repository https://github.com/sauravlhs/BoardGame.git
+10. Open the Nexus Repository, and copy the link for Nexus releases and Nexus snapshots. Now open the pom.xml file and update the links as below.
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b74373c3-ebdb-4b90-a34d-0a388d312d95)
+
+11. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
+
+![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
+
+12. Go to Jenkins Dashboard -> Tools -> Configure Maven, JDK, SonarQube, Docker, 
+
+13. Now go to Jenkins dashboard -> Select new Item -> give project name and select pipeline and click Ok.
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/aba85d1b-3b94-4718-8246-0eb3f666c51c)
+
+
+14. Select discard old builds and maximum last builds to 2. Scroll down to the pipeline section and select pipeline script. 
+
+     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/06df155d-9bc0-4ce2-975d-5a67b96663b6)
+
+15. Create your pipeline according to the project. Apply and Save.
+16. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/ce56b258-9c4c-4cb3-bb4b-89294a0851e1)
+
+17. Click on Build now.
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b754b802-0220-4136-b968-31860323db69)
+
+18. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/73d44577-9c97-4c93-98a5-3950019e545d)
+
+    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
+
+
+
+
+
+    
+
+
+
+
 
 
 
