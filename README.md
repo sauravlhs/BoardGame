@@ -271,23 +271,24 @@
      ```bash
      git push -u origin master
      ```
+     
 10. **Updating pom.xml file for Nexus Repository**
    - Open pom.xml file in the editor of your choice
    - Open Nexus Repository on the web via VM IP
    - Copy the IP address of maven-releases and maven-snapshots and update the pox.xml in the end as below
      
      ```bash
-     <distributionManagement>
-        <repository>
-      		<id>maven-releases</id>
-      		<url>http://SonarQube IP/repository/maven-releases/</url>
-      	</repository>
-      	<snapshotRepository>
-      		<id>maven-snapshots</id>
-      		<url>http://SonarQube IP/repository/maven-snapshots/</url>
-      	</snapshotRepository>
-   	</distributionManagement>
-      ```
+        <distributionManagement>
+           <repository>
+         		<id>maven-releases</id>
+         		<url>http://SonarQube IP/repository/maven-releases/</url>
+         	</repository>
+         	<snapshotRepository>
+         		<id>maven-snapshots</id>
+         		<url>http://SonarQube IP/repository/maven-snapshots/</url>
+         	</snapshotRepository>
+      	</distributionManagement>
+     ```
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b74373c3-ebdb-4b90-a34d-0a388d312d95)
 
