@@ -318,6 +318,14 @@
 
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
+12. **Configuring required tools in Jenkins**
+    ###Maven
+    - Go to the Maven configuration section
+    - In Default settings provider select use Default Maven Settings
+
+    ###JDK
+   
+    
 12. Go to Jenkins Dashboard -> Tools -> Configure Maven, JDK, SonarQube, Docker, 
 
 13. Now go to Jenkins dashboard -> Select new Item -> give project name and select pipeline and click Ok.
