@@ -1,3 +1,5 @@
+### A Complete CICD Project
+
 1. Create a VPC where you want to build the project.
 2. Create a Security Group for the EC2 instance.
 
