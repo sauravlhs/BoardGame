@@ -6,7 +6,7 @@
    - Search EC2 instance and click on Launch Instance.
    - Choose Amazon Machine Image(AMI), Select Ubuntu server 20.04 LTS.
    - Configure the instance such as network settings, IAM role.
-   - Next, add storage.
+   - Next we will add storage eg `20 GB`.
    - Add a security group as below.
 
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5490a5d2-2748-46de-9d2f-a3b9ec52cb5b)
@@ -23,7 +23,7 @@
      
    - Create a script to install Docker, required dependencies for Kubernetes, Add Kubernetes Repository and GPG Key, update the package, and install Kubernetes Components [On Master & Worker Node]
    - Create a new file eg. `k8.sh` 
-   - paste the below command
+   - paste the below command:
      
      ```bash
      sudo apt install docker.io -y
@@ -41,13 +41,13 @@
      
      ```
      
-   - Make it executable using:
+   - Make the file executable using below command:
      
      ```bash
      chmod +x k8.sh
      ```
      
-   - Now you can run it using:
+   - Now we can run the file using below command:
      
      ```bash
      ./k8.sh
