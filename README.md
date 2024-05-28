@@ -1,4 +1,7 @@
 ### A Complete CICD Project
+<img width="960" alt="1" src="https://github.com/sauravlhs/BoardGame/assets/67467237/bd8e42a7-4d9a-4676-8505-a4a3bb7f2d68">
+
+
 
 1. Create a VPC where you want to build the project.
 2. Create a Security Group for the EC2 instance.
