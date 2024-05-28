@@ -576,11 +576,7 @@
       - Run the below command and copy the token from the output
         ```bash
         kubectl describe mysecretname -n webapps
-        ```
-
-      
-
-      
+        ```     
 
     
 17. **Setting up credentials for pipeline**
@@ -631,7 +627,12 @@
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
 
-18. **Setting up the monitor**
+    you can access the application using one of the slave node IP and port of load balancer `http://SlaveIP:LoadBalancer Port`
+
+    <img width="961" alt="2" src="https://github.com/sauravlhs/BoardGame/assets/67467237/0afb90be-1949-4f66-85e9-9e7ae8565959">
+
+
+19. **Setting up the monitor**
 
     We'll start with creating an EC2 instance for monitoring
     - Search EC2 instance and click on Launch Instance.
