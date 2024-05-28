@@ -13,8 +13,8 @@
    
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/d5c63c2a-bc49-4504-89a7-5922398fab9e)
 
-7. Now set up sonarQube and Nexus.
-8. Now go to Nexus -> Administration -> Configuration -> Webhooks and add the SonarQube URL
+7. Now download sonarQube, Nexus, and docker and set it up.
+8. Once these are downloaded, go to Nexus -> Administration -> Configuration -> Webhooks and add the SonarQube URL
    
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/1e63ba8c-7fd5-402c-b0bf-2048306cecb8)
 
