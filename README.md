@@ -144,7 +144,6 @@
    - Create a new file for script eg. `nexus.sh` and paste the below command
      
      ```bash
-      #!/bin/bash
       sudo apt-get update
       
       # Install necessary dependencies
@@ -175,46 +174,87 @@
       docker run -d --name nexus -p 8081:8081 sonatype/nexus3:latest
      ```
    - Now run `docker ps` tp get the container ID.
-   - After running the command, we can access the host using HTTP://IP:8081
+   - After running the command, we can access the host using http://IP:8081
    - Now we need to change the password for Nexus which you can do by following the steps.
    - Execute `docker exec` to access the container's bash terminal
      ```bash
       docker exec -it <container_ID> /bin/bash
      ```
-     Replace the <container_ID> with your Nexus container ID 
+     Replace the <container_ID> with your Nexus container ID
+   - Navigate to Nexus Directory inside the container's bash shell, and navigate to the directory where Nexus stores its configuration:
+
+    ```bash
+    cd sonatype-work/nexus3
+    ```
+   - View the content of `admin.password` file
      
-
-
+    ```bash
+    cat admin.password
+    ```
+   - exit bash by typing `bash`
 
 6. **Setting up SonarQube**
+   - Create a new file for the script eg. `sonarQube.sh` and paste the below command
      
+     ```bash
+      sudo apt-get update
+      
+      # Install necessary dependencies
+      sudo apt-get install -y ca-certificates curl
+      
+      # Create directory for Docker GPG key
+      sudo install -m 0755 -d /etc/apt/keyrings
+      
+      # Download Docker's GPG key
+      sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+      
+      # Ensure proper permissions for the key
+      sudo chmod a+r /etc/apt/keyrings/docker.asc
+      
+      # Add Docker repository to Apt sources
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      
+      sudo apt-get update
+      
+      sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 
+     ```
+     
+   - Make the file as executable and run the file as done before.
+   - Now we will run sonarQube in Docker with the below command
+     
+     ```bash
+      docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+     ```
 
+   - Access the sonarQube via `http://VmIP:9000`
 
+7. **Configuring Jenkins**
+   - Enter your login user id and password.
+   - Click on install the suggested plugins.
+   - Now go to Manage Jenkins --> available plugins
+   - Install the required plugins for the project
+  
+     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/01bdcfea-f8a5-43fb-9539-b15aee3f3156)
 
-
-
-
-
-
-
- 
-   
-   
-
-   
-![image](https://github.com/sauravlhs/BoardGame/assets/67467237/d5c63c2a-bc49-4504-89a7-5922398fab9e)
-
-7. Now download sonarQube, Nexus, and docker and set it up.
-8. Once these are downloaded, go to Nexus -> Administration -> Configuration -> Webhooks and add the SonarQube URL
+8. **Configuring Nexus repository**
+   - Open Nexus via VM IP.
+   - Go to Nexus --> Administration --> Configuration --> Webhooks
+   - Give the Webhooks name of your choice eg `Jenkins`
+   - In the URL section, enter SonarQube IP address in the following way `http://SonarQubeIP:8080/sonarqube-webhooks`
    
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/1e63ba8c-7fd5-402c-b0bf-2048306cecb8)
 
-9. Once this is set, clone the GitHub URL into your repository https://github.com/sauravlhs/BoardGame.git
-10. Open the Nexus Repository, and copy the link for Nexus releases and Nexus snapshots. Now open the pom.xml file and update the links as below.
+
+   
+
+10. Once this is set, clone the GitHub URL into your repository https://github.com/sauravlhs/BoardGame.git
+11. Open the Nexus Repository, and copy the link for Nexus releases and Nexus snapshots. Now open the pom.xml file and update the links as below.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b74373c3-ebdb-4b90-a34d-0a388d312d95)
 
-11. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
+12. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
 
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
