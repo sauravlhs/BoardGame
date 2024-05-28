@@ -290,12 +290,31 @@
       	</distributionManagement>
      ```
 
-    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b74373c3-ebdb-4b90-a34d-0a388d312d95)
+   ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/a5db0165-5dfe-46e9-9819-7739b260547c)
+
 
 
 11. **Setting up Nexus repository in Jenkins**
+    - Go to Jenkins --> Manage Jenkins --> Open manage files --> Click on add a new config --> select global maven settings.xml.
+    - Give ID of your choice and click next.
+    - Find the Content section and scroll down until you find Servers section.
+    - Add the following section
+      
+      ```bash
+      <server>
+         <id>maven-releases</id>
+         <username>your SonarQube username</username>
+         <password>your SonarQube password</password>
+      </server>
+      <server>
+         <id>maven-snapshots</id>
+         <username>your SonarQube username</username>
+         <password>your SonarQube password</password>
+      </server>
+      ```
+    
+   - Click on Submit
 
-13. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
 
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
