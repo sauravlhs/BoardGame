@@ -196,7 +196,7 @@
    - exit bash by typing `bash`
 
 6. **Setting up SonarQube**
-   - Create a new file for the script eg. `sonarQube.sh` and paste the below command
+   - Create a new file for the script eg. `sonarQube.sh` and paste the below command:
      
      ```bash
       sudo apt-get update
@@ -224,7 +224,7 @@
      ```
      
    - Make the file as executable and run the file as done before.
-   - Now we will run sonarQube in Docker with the below command
+   - Now we will run sonarQube in Docker with the below command.
      
      ```bash
       docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
@@ -235,29 +235,29 @@
 7. **Configuring Jenkins**
    - Enter your login user id and password.
    - Click on install the suggested plugins.
-   - Now go to Manage Jenkins --> available plugins
-   - Install the required plugins for the project
+   - Now go to Manage Jenkins --> available plugins.
+   - Install the required plugins for the project.
   
      ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/01bdcfea-f8a5-43fb-9539-b15aee3f3156)
 
 8. **Configuring Nexus repository**
    - Open Nexus via VM IP.
-   - Go to Nexus --> Administration --> Configuration --> Webhooks
-   - Give the Webhooks name of your choice eg `Jenkins`
-   - In the URL section, enter SonarQube IP address in the following way `http://SonarQubeIP:8080/sonarqube-webhooks`
+   - Go to Nexus --> Administration --> Configuration --> Webhooks.
+   - Give the Webhooks name of your choice eg `Jenkins`.
+   - In the URL section, enter SonarQube IP address in the following way `http://SonarQubeIP:8080/sonarqube-webhooks`.
    
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/1e63ba8c-7fd5-402c-b0bf-2048306cecb8)
 
 9. **Setting Up GitHub repository**
-   - Login to GitHub repository using your credentials
+   - Login to GitHub repository using your credentials.
    - Create a new Git repository.
    - We will copy the Git access token, for this we will go to settings --> Developer settings --> generate a new token by providing all the access and copy the token.
-   - Clone the repository in your local by using the following command
+   - Clone the repository in your local by using the following command.
      ```bash
      git clone <your repository url>
      ```
      Replace `your repository URL` with your repository URL
-   - Add your source code and run the following command
+   - Add your source code and run the following command:
     
      ```bash
      git add .
@@ -266,16 +266,16 @@
      git push
      ```
      
-   - If this is your first commit then you might need to specify the remote and branch
+   - If this is your first commit then you might need to specify the remote and branch as below:
      
      ```bash
      git push -u origin master
      ```
      
 10. **Updating pom.xml file for Nexus Repository**
-   - Open pom.xml file in the editor of your choice
-   - Open Nexus Repository on the web via VM IP
-   - Copy the IP address of maven-releases and maven-snapshots and update the pox.xml in the end as below
+   - Open pom.xml file in the editor of your choice.
+   - Open Nexus Repository on the web via VM IP.
+   - Copy the IP address of maven-releases and maven-snapshots and update the pox.xml in the end as below:
      
      ```bash
         <distributionManagement>
@@ -298,7 +298,7 @@
     - Go to Jenkins --> Manage Jenkins --> Open manage files --> Click on add a new config --> select global maven settings.xml.
     - Give ID of your choice and click next.
     - Find the Content section and scroll down until you find Servers section.
-    - Add the following section
+    - Add the following section:
       
       ```bash
       <server>
@@ -313,7 +313,7 @@
       </server>
       ```
     
-   - Click on Submit
+   - Click on Submit.
 
 
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
@@ -322,57 +322,173 @@
     - Go to Jenkins dashboard --> Manage Jenkins --> tools
     
      Maven
-    - In name give `maven3`
-    - Select Install Automatically
-    - click on the dropdown and select `3.6.1`
+    - In name give `maven3`.
+    - Select Install Automatically.
+    - click on the dropdown and select `3.6.1`.
 
      JDK
     - Go to JDK section
-    - In name give `jdk17`
-    - Select Install Automatically
-    - click on the dropdown and select `jdk-17.0.9+9`
+    - In the name section give name as `jdk17`.
+    - Select Install Automatically.
+    - click on the dropdown and select `jdk-17.0.9+9`.
 
      SonarQube
     - Go to SonarQube Scanner installations section
-    - In name section give `sonar-scanner`
+    - In the name section give name as `sonar-scanner`.
     - Select Install Automatically.
-    - click on the dropdown and select `SonarQube Scanner 5.0.1.3006`
+    - click on the dropdown and select `SonarQube Scanner 5.0.1.3006`.
 
      Docker
-    - Go to Docker installationss section
-    - In name section give `docker`
-    - Select Install Automatically and select add installer
-    - Select download from Docker.com
+    - Go to Docker installation section
+    - In the name section give name as `docker`.
+    - Select Install Automatically and select add installer.
+    - Select download from Docker.com.
    
     
-12. Go to Jenkins Dashboard -> Tools -> Configure Maven, JDK, SonarQube, Docker, 
-
-13. Now go to Jenkins dashboard -> Select new Item -> give project name and select pipeline and click Ok.
+13. **Setting up new pipeline**
+    - Go to Jenkins Dashboard.
+    - Select New Item.
+    - Give the project name of your choice eg. `BoardGame`, select pipeline, and click Ok.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/aba85d1b-3b94-4718-8246-0eb3f666c51c)
 
+    - In General section select discard old builds.
+    - In max # of builds to keep enter `2`.
+    - Scroll down to the pipeline section and select pipeline script.
+   
+14. **Creating on pipeline script**
+    - Below is the pipeline script.
+      
+      ```bash
+      pipeline {
+       agent any
+   
+       tools{
+           jdk 'jdk17'
+           maven 'maven3'
+       }
+       
+       enviornment {
+           SCANNER_HOME= tool 'sonar-scanner'
+       }
+   
+       stages {
+           stage('Git Checkout') {
+               steps {
+                  git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/sauravlhs/BoardGame.git'
+               }
+           }
+           stage('Compile') {
+               steps {
+                   sh "mvn compile"
+               }
+           }
+           stage('Test') {
+               steps {
+                   sh "mvn test"
+               }
+           }
+           stage('File system scan') {
+               steps {
+                   sh "trivy fs --format table -o trivy-fs-report.html ."
+               }
+           }
+           stage('SonarQube Analysis') {
+               steps {
+                   withSonarQubeEnv('sonar'){
+                       sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=BoardName -Dsonar.projectKey=BoardName -Dsonar.java.binaries=. '''
+                   }
+               }
+           }
+           stage('Quality Gate') {
+               steps {
+                   waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+               }
+           }
+           stage('Build') {
+               steps {
+                   sh "mvn package"
+               }
+           }
+           stage('Publish to Nexus') {
+               steps {
+                   withMaven(globalMavenSettingsConfig: 'CICD-project', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+                         sh "mvn deploy"
+                   }
+               }
+           }
+           stage('Build and Tag Docker image') {
+               steps {
+                   script{
+                       withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                           sh "docker build -t sauravlhs/CICDProject:latest ."
+                        
+                    }
+                }
+            }
+        }
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-fs-report.html sauravlhs/CICDProject:latest"
+            }
+        }
+        stage('push docker image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push sauravlhs/CICDProject:latest"
+                        
+                    }
+                }
+            }
+        }
+        stage('Deploy to kubernetes') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.11.108:6443') {
+                    sh "kubectl apply -f deployment-service.yml"
+                }
+            }
+        }
+        stage('Verify the deployment') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.11.108:6443') {
+                    sh "kubectl get pods"
+                    sh "kubectl get svc"
+                }
+            }
+        }
+        
+        }
+       }
+      }
+   ```
 
-14. Select discard old builds and maximum last builds to 2. Scroll down to the pipeline section and select pipeline script. 
 
-     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/06df155d-9bc0-4ce2-975d-5a67b96663b6)
 
-15. Create your pipeline according to the project. Apply and Save.
-16. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
+
+
+
+
+
+      
+
+16. Create your pipeline according to the project. Apply and Save.
+17. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/ce56b258-9c4c-4cb3-bb4b-89294a0851e1)
 
-17. Click on Build now.
+18. Click on Build now.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b754b802-0220-4136-b968-31860323db69)
 
-18. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
+19. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/73d44577-9c97-4c93-98a5-3950019e545d)
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
 
-19. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
-20. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
+20. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
+21. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/141c3226-e95e-4fd1-9756-6ff674754731)
 
