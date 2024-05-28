@@ -41,13 +41,13 @@
      
      ```
      
-   - Make the file executable using below command:
+   - Make the file executable using the below command:
      
      ```bash
      chmod +x k8.sh
      ```
      
-   - Now we can run the file using below command:
+   - Now we can run the file using the below command:
      
      ```bash
      ./k8.sh
@@ -66,15 +66,18 @@
      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
      sudo chown $(id -u):$(id -g) $HOME/.kube/config
      ```
+     
 3. **Setting up Jenkins**
    - Update System packages [On Master & Worker Node]
      
      ```bash
      sudo apt-get update
      ```
+     
    - Create a script to install Jenkins in Ubuntu
    - Create a new file eg. `Jenkins.sh`
    - Paste the command
+     
       ```bash
       #!/bin/bash
       
@@ -96,6 +99,7 @@
       # Install Jenkins
       sudo apt-get install jenkins -y
       ```
+      
    - Make it executable using:
      
      ```bash
@@ -108,7 +112,7 @@
      ./jenkins.sh
      ```
 
-   - Now Install docker for future use. We will create a script for this and make it executable as done before.
+   - Now we will install docker for future use. We will create a script for this and make it executable as done before.
    - Create a new file eg. `dock.sh` and paste the below command
      
      ```bash
@@ -141,7 +145,7 @@
      ```
      
 4. **Setting up Nexus**
-   - Create a new file for script eg. `nexus.sh` and paste the below command
+   - Create a new file for the script eg. `nexus.sh` and paste the below command
      
      ```bash
       sudo apt-get update
@@ -167,19 +171,23 @@
       
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 
      ```
+     
    - Make the file as executable and run the file as done before.
-   - Now we will create a Nexus using Docker container by running nexus3 and exposing post 8081 by using the following command
+   - Now we will create a Nexus using Docker container by running nexus3 and exposing port 8081 by using the following command
      
      ```bash
       docker run -d --name nexus -p 8081:8081 sonatype/nexus3:latest
      ```
-   - Now run `docker ps` tp get the container ID.
+     
+   - Now run `docker ps` to get the container ID.
    - After running the command, we can access the host using http://IP:8081
    - Now we need to change the password for Nexus which you can do by following the steps.
    - Execute `docker exec` to access the container's bash terminal
+     
      ```bash
       docker exec -it <container_ID> /bin/bash
      ```
+     
      Replace the <container_ID> with your Nexus container ID
    - Navigate to Nexus Directory inside the container's bash shell, and navigate to the directory where Nexus stores its configuration:
 
