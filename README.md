@@ -360,108 +360,108 @@
     - Below is the pipeline script.
       
       ```bash
-         pipeline {
-          agent any
-      
-          tools{
-              jdk 'jdk17'
-              maven 'maven3'
-          }
-          
-          environment {
-              SCANNER_HOME= tool 'sonar-scanner'
-          }
-      
-          stages {
-              stage('Git Checkout') {
-                  steps {
-                     git branch: 'main', credentialsId: 'git-cred', url: 'your repository URL'
-                  }
-              }
-              stage('Compile') {
-                  steps {
-                      sh "mvn compile"
-                  }
-              }
-              stage('Test') {
-                  steps {
-                      sh "mvn test"
-                  }
-              }
-              stage('File system scan') {
-                  steps {
-                      sh "trivy fs --format table -o trivy-fs-report.html ."
-                  }
-              }
-              stage('SonarQube Analysis') {
-                  steps {
-                      withSonarQubeEnv('sonar'){
-                          sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=BoardName -Dsonar.projectKey=BoardName -Dsonar.java.binaries=. '''
-                      }
-                  }
-              }
-              stage('Quality Gate') {
-                  steps {
-                      waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-                  }
-              }
-              stage('Build') {
-                  steps {
-                      sh "mvn package"
-                  }
-              }
-              stage('Publish to Nexus') {
-                  steps {
-                      withMaven(globalMavenSettingsConfig: 'CICD-project', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
-                            sh "mvn deploy"
-                      }
-                  }
-              }
-              stage('Build and Tag Docker image') {
-                  steps {
-                      script{
-                          withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                              sh "docker build -t sauravlhs/cicdproject:latest ."
-                           
-                       }
+      pipeline {
+       agent any
+   
+       tools{
+           jdk 'jdk17'
+           maven 'maven3'
+       }
+       
+       environment {
+           SCANNER_HOME= tool 'sonar-scanner'
+       }
+   
+       stages {
+           stage('Git Checkout') {
+               steps {
+                  git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/sauravlhs/BoardGame.git'
+               }
+           }
+           stage('Compile') {
+               steps {
+                   sh "mvn compile"
+               }
+           }
+           stage('Test') {
+               steps {
+                   sh "mvn test"
+               }
+           }
+           stage('File system scan') {
+               steps {
+                   sh "trivy fs --format table -o trivy-fs-report.html ."
+               }
+           }
+           stage('SonarQube Analysis') {
+               steps {
+                   withSonarQubeEnv('sonar'){
+                       sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=BoardGame -Dsonar.projectKey=BoardGame -Dsonar.java.binaries=. '''
                    }
                }
            }
-           stage('Docker Image Scan') {
+           stage('Quality Gate') {
                steps {
-                   sh "trivy image --format table -o trivy-image-report.html sauravlhs/cicdproject:latest"
+                   waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                }
            }
-           stage('push docker image') {
+           stage('Build') {
+               steps {
+                   sh "mvn package"
+               }
+           }
+           stage('Publish to Nexus') {
+               steps {
+                   withMaven(globalMavenSettingsConfig: 'global-settings', jdk: 'jdk17', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+                         sh "mvn deploy"
+                   }
+               }
+           }
+           stage('Build and Tag Docker image') {
                steps {
                    script{
                        withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                           sh "docker push sauravlhs/cicdproject:latest"
-                           
-                       }
-                   }
-               }
-           }
-           stage('Deploy to kubernetes') {
-               steps {
-                   withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.11.108:6443') {
-                       sh "kubectl apply -f deployment-service.yml"
-                   }
-               }
-           }
-           stage('Verify the deployment') {
-               steps {
-                   withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl:                'https://172.31.11.108:6443') {
-                       sh "kubectl get pods"
-                       sh "kubectl get svc"
-                   }
-               }
-           }
-           
-           }
-          }
-         }
-    ```
+                           sh "docker build -t sauravlhs/cicdproject:latest ."
+                        
+                    }
+                }
+            }
+        }
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-image-report.html sauravlhs/cicdproject:latest"
+            }
+        }
+        stage('push docker image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push sauravlhs/cicdproject:latest"
+                        
+                    }
+                }
+            }
+        }
+        stage('Deploy to kubernetes') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.7.67:6443') {
+                    sh "kubectl apply -f deployment-service.yml"
+                }
+            }
+        }
+        stage('Verify the deployment') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.7.67:6443') {
+                    sh "kubectl get pods"
+                    sh "kubectl get svc"
+                }
+            }
+        }
+        
+       }
+      }
+     
+      ```
 
 
 
