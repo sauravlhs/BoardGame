@@ -319,12 +319,30 @@
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
 12. **Configuring required tools in Jenkins**
+    - Go to Jenkins dashboard --> Manage Jenkins --> tools
     
-###Maven
-    - Go to the Maven configuration section
-    - In Default settings provider select use Default Maven Settings
+     Maven
+    - In name give `maven3`
+    - Select Install Automatically
+    - click on the dropdown and select `3.6.1`
 
-###JDK
+     JDK
+    - Go to JDK section
+    - In name give `jdk17`
+    - Select Install Automatically
+    - click on the dropdown and select `jdk-17.0.9+9`
+
+     SonarQube
+    - Go to SonarQube Scanner installations section
+    - In name section give `sonar-scanner`
+    - Select Install Automatically.
+    - click on the dropdown and select `SonarQube Scanner 5.0.1.3006`
+
+     Docker
+    - Go to Docker installationss section
+    - In name section give `docker`
+    - Select Install Automatically and select add installer
+    - Select download from Docker.com
    
     
 12. Go to Jenkins Dashboard -> Tools -> Configure Maven, JDK, SonarQube, Docker, 
