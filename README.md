@@ -603,26 +603,94 @@
     - In secret, paste the secret key
     - Give ID and description of your choice eg. `sonar-token`.
     - Click on create.
-
-
-
-
-18. Go to Jenkins Dashboard -> Manage Jenkins -> Credentials -> select Global and Add Credentials.
+      
+     Kubernetes
+    - In kind section select `Secret text`.
+    - In scope select `Global`.
+    - In secret, paste the secret key for the kubernetes
+    - Give ID and description of your choice eg. `k8-cred`.
+    - Click on create.
+   
+     Docker
+    - In kind section select `Username with password`.
+    - In scope select `Global`.
+    - In username, give your Docker username.
+    - In password give docker password.
+    - Give ID and description of your choice eg. `docker-cred`.
+    - Click on create.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/ce56b258-9c4c-4cb3-bb4b-89294a0851e1)
 
-19. Click on Build now.
+    Now go to Jenkins dashboard --> Click on configured pipeline --> on the left side click on build now.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b754b802-0220-4136-b968-31860323db69)
 
-20. Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
+    Once your pipeline is built successfully. It will create an artifact and push it to nexus repository and the code vulnerability will be checked by SonarQube.
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/73d44577-9c97-4c93-98a5-3950019e545d)
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5badc558-910c-456c-9bc5-03b93dad7b11)
 
-21. Now we will set up Grafana dashboard. We will download Prometheus and Grafana dashboard.
-22. Open Grafana dashboard -> data source -> add Prometheus URL and save. You will be able to see the dashboard
+18. **Setting up the monitor**
+
+    We'll start with creating an EC2 instance for monitoring
+    - Search EC2 instance and click on Launch Instance.
+    - Choose Amazon Machine Image(AMI), Select Ubuntu server 20.04 LTS.
+    - Configure the instance such as network settings, IAM role.
+    - Next, add storage.
+    - Add a security group
+    - Click on Review and Launch.
+    - Access your instance using MobaXterm.
+    - run `sudo apt update`
+      
+    Installing Prometheus
+    - run the below command in the terminal
+      
+      ```bash
+      wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+      ```
+      
+    - once this is downloaded, extract the package by using the below command:
+      
+      ```bash
+      tar -xvf file name
+      ```
+      
+   - run prometheus using the below command:
+     
+     ```bash
+     ./prometheus &
+     ```
+     By default prometheus will be running on port 9090
+
+     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/4ed7a27a-7091-424d-83ca-71653406fb76)
+
+     
+   Installing grafana dashboard
+   - Create a new script file eg. `grafana.sh`
+   - Paste the below command:
+     
+     ```bash
+     sudo apt-get install -y adduser libfontconfig1 musl
+     wget https://dl.grafana.com/enterprise/release/grafana-enterprise_11.0.0_amd64.deb
+     sudo dpkg -i grafana-enterprise_11.0.0_amd64.deb
+     ```
+
+   - run grafana using the below command:
+     
+     ```bash
+     ./sudo /bin/systemctl start grafana-server 
+     ```
+     
+     By default grafana will be running on port 3000. Login and change the password
+
+19. **setting the configuration for grafana**
+    - Open Grafana dashboard
+    - Go to data source
+    - Add prometheus URL and save.
+    - Go to import dashboard.
+    - Give the ID for the dashboard you want to import and click on Load
+
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/141c3226-e95e-4fd1-9756-6ff674754731)
 
