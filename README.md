@@ -1,5 +1,21 @@
-### A Complete CICD Project
+# A Complete CICD Project
 <img width="960" alt="1" src="https://github.com/sauravlhs/BoardGame/assets/67467237/bd8e42a7-4d9a-4676-8505-a4a3bb7f2d68">
+
+### Creating and EC2 Instance
+1 **Sign in to your AWS account using your credentials**
+   - Search EC2 instance and click on Launch Instance.
+   - Choose Amazon Machine Image(AMI), Select Ubuntu server 20.04 LTS.
+   - Configure the instance such as network settings, IAM role.
+   - Next, add storage.
+   - Add a security group as below.
+
+   ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/5490a5d2-2748-46de-9d2f-a3b9ec52cb5b)
+
+   - Click on Review and Launch.
+   - Access your instance using MobaXterm.
+
+2. **Setting up K8**
+   - 
 
 
 
