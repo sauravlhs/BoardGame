@@ -186,11 +186,13 @@
     ```bash
     cd sonatype-work/nexus3
     ```
+    
    - View the content of `admin.password` file
-     
+
     ```bash
     cat admin.password
     ```
+    
    - exit bash by typing `bash`
 
 6. **Setting up SonarQube**
@@ -246,15 +248,53 @@
    
    ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/1e63ba8c-7fd5-402c-b0bf-2048306cecb8)
 
-
-   
-
-10. Once this is set, clone the GitHub URL into your repository https://github.com/sauravlhs/BoardGame.git
-11. Open the Nexus Repository, and copy the link for Nexus releases and Nexus snapshots. Now open the pom.xml file and update the links as below.
+9. **Setting Up GitHub repository**
+   - Login to GitHub repository using your credentials
+   - Create a new Git repository.
+   - We will copy the Git access token, for this we will go to settings --> Developer settings --> generate a new token by providing all the access and copy the token.
+   - Clone the repository in your local by using the following command
+     ```bash
+     git clone <your repository url>
+     ```
+     Replace `your repository URL` with your repository URL
+   - Add your source code and run the following command
+    
+     ```bash
+     git add .
+     git status
+     git commit -m "your commit message"
+     git push
+     ```
+     
+   - If this is your first commit then you might need to specify the remote and branch
+     
+     ```bash
+     git push -u origin master
+     ```
+10. **Updating pom.xml file for Nexus Repository**
+   - Open pom.xml file in the editor of your choice
+   - Open Nexus Repository on the web via VM IP
+   - Copy the IP address of maven-releases and maven-snapshots and update the pox.xml in the end as below
+     
+     ```bash
+     <distributionManagement>
+        <repository>
+      		<id>maven-releases</id>
+      		<url>http://SonarQube IP/repository/maven-releases/</url>
+      	</repository>
+      	<snapshotRepository>
+      		<id>maven-snapshots</id>
+      		<url>http://SonarQube IP/repository/maven-snapshots/</url>
+      	</snapshotRepository>
+   	</distributionManagement>
+      ```
 
     ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/b74373c3-ebdb-4b90-a34d-0a388d312d95)
 
-12. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
+
+11. **Setting up Nexus repository in Jenkins**
+
+13. Go to Jenkins -> Manage Jenkins -> Open Manage Files -> Click on add a new config -> select global maven settings.xml -> give ID of your choice and click next -> scroll down the servers and change the configuration as per the pom.xml file and save it.
 
 ![image](https://github.com/sauravlhs/BoardGame/assets/67467237/e295911c-55f2-4961-8920-4e5dd6e27a21)
 
