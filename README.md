@@ -113,7 +113,7 @@
      ```
 
    - Now we will install docker for future use. We will create a script for this and make it executable as done before.
-   - Create a new file eg. `dock.sh` and paste the below command
+   - Create a new file eg. `dock.sh` and paste the below command:
      
      ```bash
      #!/bin/bash
